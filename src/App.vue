@@ -3,25 +3,31 @@
     <!-- <img src="./assets/logo.png"> -->
     <!-- <router-view/> -->
     <!-- <div class="aframe-container"> -->
-      <a-scene>
+      <a-scene
+        @click="onSceneClick($event)"
+        cursor="rayOrigin: mouse"
+        inspector
+        stats>
         <a-sky
-          :src="panoramaImage"
-          rotation="0 -130 0"
-        >
+          :src="panoramaImage">
         </a-sky>
+        <a-camera
+          position="0 0 0"
+          reverse-mouse-drag="true"
+          @componentchanged="onCameraChange($event)">
+        </a-camera>
         <a-entity>
           <a-image
             :src="tagImage"
             width="1"
             height="1"
-            opacity=".6"
+            :opacity="initialOpacity"
             color="#fff"
             position="-2.5 0.25 -1.5"
-            @click="clickMarker($event)"
-            @mouseenter="mouseenterMarker($event)"
-            @mouseleave="mouseleaveMarker($event)"
-            cursor-listener
-            look-at="[camera]">
+            @click="onMarkerClick($event)"
+            @mouseenter="onMarkerMouseenter($event)"
+            @mouseleave="onMarkerMouseleave($event)"
+            transparent="true">
             <a-animation
               attribute="scale"
               from=".8 .8 1"
@@ -62,18 +68,31 @@ export default {
     }
   },
 
+  mounted () {
+
+  },
+
   methods: {
-    clickMarker (e) {
-      console.log('in')
+    onSceneClick (e) {
+      console.log('click scene: ', e)
     },
 
-    mouseenterMarker (e) {
-      console.log('in')
+    onMarkerClick (e) {
+      console.log('click marker: ', e)
+    },
+
+    onMarkerMouseenter (e) {
+      console.log('mouse enter')
       e.currentTarget.setAttribute('opacity', this.activeOpacity)
     },
 
-    mouseleaveMarker (e) {
+    onMarkerMouseleave (e) {
+      console.log('mouse leave')
       e.currentTarget.setAttribute('opacity', this.initialOpacity)
+    },
+
+    onCameraChange (e) {
+      console.log('camera change: ', e)
     }
   }
 }
