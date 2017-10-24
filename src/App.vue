@@ -4,49 +4,64 @@
     <!-- <router-view/> -->
     <!-- <div class="aframe-container"> -->
       <a-scene
+        ref="scene"
         @click="onSceneClick($event)"
-        cursor="rayOrigin: mouse"
+        @enter-vr="handleEnterVR()"
+        @exit-vr="handleExitVR()"
+        :vr-mode-ui="scene.vrModeUi"
+        :cursor="scene.cursor"
         inspector
         stats>
         <a-sky
           :src="panoramaImage">
         </a-sky>
         <a-camera
-          position="0 0 0"
-          reverse-mouse-drag="true"
+          :reverse-mouse-drag="camera.shouldReverseDrag"
           @componentchanged="onCameraChange($event)">
+          <a-cursor
+            v-if="isUsingVRMode"
+            :fuse="cursor.shouldFuse"
+            :color="cursor.color"
+            :position="cursor.position">
+            <a-animation
+              :begin="cursor.animation.begin"
+              :attribute="cursor.animation.attribute"
+              :fill="cursor.animation.fill"
+              :from="cursor.animation.from"
+              :to="cursor.animation.to"
+              :dur="cursor.animation.duration">
+            </a-animation>
+          </a-cursor>
         </a-camera>
         <a-entity>
           <a-image
-            :src="tagImage"
-            width="1"
-            height="1"
-            :opacity="initialOpacity"
-            color="#fff"
-            position="-2.5 0.25 -1.5"
-            @click="onMarkerClick($event)"
-            @mouseenter="onMarkerMouseenter($event)"
-            @mouseleave="onMarkerMouseleave($event)"
-            transparent="true">
+            v-for="marker in markerSystem.markers" :key="marker.id"
+            :width="markerSystem.width"
+            :height="markerSystem.height"
+            :color="markerSystem.color"
+            :opacity="markerSystem.initialOpacity"
+            :transparent="markerSystem.isTransparent"
+            :src="marker.src"
+            :position="marker.position"
+            @click="onMarkerClick(marker, $event)"
+            @mouseenter="onMarkerMouseenter(marker, $event)"
+            @mouseleave="onMarkerMouseleave(marker, $event)">
             <a-animation
-              attribute="scale"
-              from=".8 .8 1"
-              to="1 1 1"
-              dur="1500"
-              fill="both"
-              repeat="indefinite">
+              :attribute="markerSystem.animation.attribute"
+              :from="markerSystem.animation.from"
+              :to="markerSystem.animation.to"
+              :dur="markerSystem.animation.duration"
+              :repeat="markerSystem.animation.repeat">
             </a-animation>
           </a-image>
         </a-entity>
-        <!-- <a-text
-          font="kelsonsans"
-          value="Puy de Sancy, France"
-          width="6"
-          position="-2.5 0.25 -1.5"
-          rotation="0 15 0"
-        >
-        </a-text> -->
       </a-scene>
+      <!-- <div class="menu-container">
+        <i
+          class="i-icon i-icon-2x i-icon-vr"
+          @click="handleEnterVR()">
+        </i>
+      </div> -->
     <!-- </div> -->
   </div>
 </template>
@@ -61,38 +76,90 @@ export default {
 
   data () {
     return {
-      panoramaImage: require('./assets/1.jpg'),
-      tagImage: require('./assets/tag.png'),
-      initialOpacity: '.6',
-      activeOpacity: '.8'
+      isUsingVRMode: false,
+      panoramaImage: require('./assets/panorama1.jpg'),
+      scene: {
+        vrModeUi: 'enabled: true',
+        cursor: 'rayOrigin: mouse'
+      },
+      camera: {
+        shouldReverseDrag: true
+      },
+      cursor: {
+        shouldFuse: true,
+        color: '#fff',
+        position: '0 0 -1',
+        animation: {
+          begin: 'fusing',
+          attribute: 'scale',
+          form: '1 1 1',
+          to: '0.1 0.1 0.1',
+          fill: 'backwards',
+          duration: 1500
+        }
+      },
+      markerSystem: {
+        width: 1,
+        height: 1,
+        color: '#fff',
+        initialOpacity: '.6',
+        activeOpacity: '.8',
+        isTransparent: true,
+        animation: {
+          attribute: 'scale',
+          from: '.8 .8 1',
+          to: '1 1 1',
+          duration: 1500,
+          repeat: 'indefinite'
+        },
+        markers: [{
+          id: 1,
+          name: 'tag',
+          src: require('./assets/tag.png'),
+          position: '-2 0.25 -5'
+        }]
+      }
     }
   },
 
   mounted () {
-
+    // console.log(this.$refs.scene)
+    // this.$refs.scene.enterVR()
   },
 
   methods: {
     onSceneClick (e) {
-      console.log('click scene: ', e)
+      // console.log('click scene: ', e)
     },
 
-    onMarkerClick (e) {
-      console.log('click marker: ', e)
+    onMarkerClick (marker, e) {
+      console.log('click: ', marker)
+      console.log('click event', e)
     },
 
-    onMarkerMouseenter (e) {
-      console.log('mouse enter')
-      e.currentTarget.setAttribute('opacity', this.activeOpacity)
+    onMarkerMouseenter (marker, e) {
+      console.log('mouse enter', marker)
+      console.log('mouse enter event', e)
+      e.currentTarget.setAttribute('opacity', this.markerSystem.activeOpacity)
     },
 
-    onMarkerMouseleave (e) {
-      console.log('mouse leave')
-      e.currentTarget.setAttribute('opacity', this.initialOpacity)
+    onMarkerMouseleave (marker, e) {
+      console.log('mouse leave', marker)
+      console.log('mouse leave event', e)
+      e.currentTarget.setAttribute('opacity', this.markerSystem.initialOpacity)
     },
 
     onCameraChange (e) {
-      console.log('camera change: ', e)
+      // console.log('camera change: ', e)
+    },
+
+    handleEnterVR () {
+      // this.$refs.scene.enterVR()
+      this.isUsingVRMode = true
+    },
+
+    handleExitVR () {
+      this.isUsingVRMode = false
     }
   }
 }
@@ -111,6 +178,33 @@ export default {
     // width: 50vw
     // height: 100vh
     // overflow: hidden
+  }
+
+  .menu-container {
+    position: absolute
+    top: 20px
+    right: 20px
+    z-index: 1
+  }
+
+  .i-icon {
+    display: block
+    width: 25px
+    height: 25px
+    cursor: pointer
+
+    &:hover {
+      opacity: .5
+    }
+
+    &.i-icon-2x {
+      width: 50px
+      height: 50px
+    }
+
+    &.i-icon-vr {
+      background-image: url('./assets/vr.svg')
+    }
   }
 }
 </style>
