@@ -62,6 +62,14 @@
           @click="handleEnterVR()">
         </i>
       </div> -->
+      <i-modal
+        class="black center"
+        v-show="shouldModalShow"
+        @closeModal="closeModal()">
+        <template slot="body">
+          in modal
+        </template>
+      </i-modal>
     <!-- </div> -->
   </div>
 </template>
@@ -70,13 +78,19 @@
 /* eslint-disable */
 import AFRAME from 'aframe'
 /* eslint-enable */
+import IModal from '@/components/UI/IModal'
 
 export default {
   name: 'app',
 
+  components: {
+    IModal
+  },
+
   data () {
     return {
       isUsingVRMode: false,
+      shouldModalShow: false,
       panoramaImage: require('./assets/panorama1.jpg'),
       scene: {
         vrModeUi: 'enabled: true',
@@ -135,6 +149,7 @@ export default {
     onMarkerClick (marker, e) {
       console.log('click: ', marker)
       console.log('click event', e)
+      this.shouldModalShow = true
     },
 
     onMarkerMouseenter (marker, e) {
@@ -151,6 +166,10 @@ export default {
 
     onCameraChange (e) {
       // console.log('camera change: ', e)
+    },
+
+    closeModal () {
+      this.shouldModalShow = false
     },
 
     handleEnterVR () {
@@ -206,5 +225,7 @@ export default {
       background-image: url('./assets/vr.svg')
     }
   }
+
+
 }
 </style>
