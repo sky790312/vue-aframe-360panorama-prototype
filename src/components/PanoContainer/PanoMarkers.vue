@@ -24,6 +24,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
+import tagImage from '@/assets/tag.png'
 
 export default {
   name: 'PanoMarkers',
@@ -47,7 +50,7 @@ export default {
         markers: [{
           id: 1,
           name: 'tag',
-          src: require('../assets/tag.png'),
+          src: tagImage,
           position: '-2 0.25 -5'
         }]
       }
@@ -55,9 +58,14 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'setShouldModalShow'
+    ]),
+
     onMarkerClick (marker, e) {
       console.log('click: ', marker)
       console.log('click event', e)
+      this.setShouldModalShow(true)
     },
 
     onMarkerMouseenter (marker, e) {
