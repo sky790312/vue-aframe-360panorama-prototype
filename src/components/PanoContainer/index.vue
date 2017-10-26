@@ -20,15 +20,12 @@
 </template>
 
 <script>
-/* eslint-disable */
-import AFRAME from 'aframe'
 import { mapGetters, mapActions } from 'vuex'
 
 import PanoMarkers from '@/components/PanoContainer/PanoMarkers'
 import PanoCamera from '@/components/PanoContainer/PanoCamera'
 
 import panoramaImage from '@/assets/panorama1.jpg'
-/* eslint-enable */
 
 export default {
   name: 'PanoContainer',

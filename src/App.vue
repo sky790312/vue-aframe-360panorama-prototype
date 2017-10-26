@@ -18,8 +18,8 @@
 <script>
 /* eslint-disable */
 import AFRAME from 'aframe'
-import { mapGetters, mapActions } from 'vuex'
 /* eslint-enable */
+import { mapGetters, mapActions } from 'vuex'
 
 import PanoContainer from '@/components/PanoContainer'
 import MenuContainer from '@/components/MenuContainer'
