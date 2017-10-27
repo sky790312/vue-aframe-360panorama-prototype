@@ -12,6 +12,10 @@
         :cursor="scene.cursor"
         inspector
         stats>
+        <!-- <a-assets>
+          <img id="logo" :src="logoImage">
+        </a-assets> -->
+        <!-- Basic plane. -->
         <a-sky
           :src="panoramaImage">
         </a-sky>
@@ -33,25 +37,46 @@
             </a-animation>
           </a-cursor>
         </a-camera>
+        <!-- Textured plane parallel to ground. -->
+        <a-entity v-if="isUsingVRMode">
+          <a-plane
+            v-if="selectedMarker.type === 'tag'"
+            :width="markerConfig.tag.planeWidth"
+            :height="markerConfig.tag.planeHeight"
+            :position="markerConfig.tag.planePosition"
+            :color="markerConfig.tag.planeColor">
+            <a-text
+              :value="selectedMarker.text"
+              :width="markerConfig.tag.fontSize"
+              :position="markerConfig.tag.fontPosition">
+            </a-text>
+            <a-image
+              :src="selectedMarker.image"
+              width="20"
+              height="20"
+              position="0 0 7">
+            </a-image>
+          </a-plane>
+        </a-entity>
         <a-entity>
           <a-image
-            v-for="marker in markerSystem.markers" :key="marker.id"
-            :width="markerSystem.width"
-            :height="markerSystem.height"
-            :color="markerSystem.color"
-            :opacity="markerSystem.initialOpacity"
-            :transparent="markerSystem.isTransparent"
+            v-for="marker in markers" :key="marker.id"
+            :width="markerConfig.width"
+            :height="markerConfig.height"
+            :color="markerConfig.color"
+            :opacity="markerConfig.initialOpacity"
+            :transparent="markerConfig.isTransparent"
             :src="marker.src"
             :position="marker.position"
             @click="onMarkerClick(marker, $event)"
             @mouseenter="onMarkerMouseenter(marker, $event)"
             @mouseleave="onMarkerMouseleave(marker, $event)">
             <a-animation
-              :attribute="markerSystem.animation.attribute"
-              :from="markerSystem.animation.from"
-              :to="markerSystem.animation.to"
-              :dur="markerSystem.animation.duration"
-              :repeat="markerSystem.animation.repeat">
+              :attribute="markerConfig.animation.attribute"
+              :from="markerConfig.animation.from"
+              :to="markerConfig.animation.to"
+              :dur="markerConfig.animation.duration"
+              :repeat="markerConfig.animation.repeat">
             </a-animation>
           </a-image>
         </a-entity>
@@ -80,6 +105,10 @@ import AFRAME from 'aframe'
 /* eslint-enable */
 import IModal from '@/components/UI/IModal'
 
+import panoramaImage from '@/assets/panorama1.jpg'
+import tagImage from '@/assets/tag.png'
+import logoImage from '@/assets/logo.png'
+
 export default {
   name: 'app',
 
@@ -91,7 +120,8 @@ export default {
     return {
       isUsingVRMode: false,
       shouldModalShow: false,
-      panoramaImage: require('./assets/panorama1.jpg'),
+      panoramaImage: panoramaImage,
+      logoImage: logoImage,
       scene: {
         vrModeUi: 'enabled: true',
         cursor: 'rayOrigin: mouse'
@@ -112,7 +142,7 @@ export default {
           duration: 1500
         }
       },
-      markerSystem: {
+      markerConfig: {
         width: 1,
         height: 1,
         color: '#fff',
@@ -126,13 +156,24 @@ export default {
           duration: 1500,
           repeat: 'indefinite'
         },
-        markers: [{
-          id: 1,
-          name: 'tag',
-          src: require('./assets/tag.png'),
-          position: '-2 0.25 -5'
-        }]
-      }
+        tag: {
+          planeWidth: 50,
+          planeHeight: 40,
+          planePosition: '0 12 -70',
+          planeColor: '#000',
+          fontSize: '6',
+          fontPosition: '-1 -10.6 65'
+        }
+      },
+      markers: [{
+        id: 1,
+        type: 'tag',
+        src: tagImage,
+        position: '0 0 -8',
+        text: 'Vue with aframe!',
+        image: logoImage
+      }],
+      selectedMarker: {}
     }
   },
 
@@ -155,13 +196,15 @@ export default {
     onMarkerMouseenter (marker, e) {
       console.log('mouse enter', marker)
       console.log('mouse enter event', e)
-      e.currentTarget.setAttribute('opacity', this.markerSystem.activeOpacity)
+      e.currentTarget.setAttribute('opacity', this.markerConfig.activeOpacity)
+      this.selectedMarker = marker
     },
 
     onMarkerMouseleave (marker, e) {
       console.log('mouse leave', marker)
       console.log('mouse leave event', e)
-      e.currentTarget.setAttribute('opacity', this.markerSystem.initialOpacity)
+      e.currentTarget.setAttribute('opacity', this.markerConfig.initialOpacity)
+      this.selectedMarker = {}
     },
 
     onCameraChange (e) {
@@ -179,6 +222,7 @@ export default {
 
     handleExitVR () {
       this.isUsingVRMode = false
+      this.shouldModalShow = false
     }
   }
 }
