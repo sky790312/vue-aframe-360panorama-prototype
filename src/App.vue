@@ -8,17 +8,16 @@
         @click="onSceneClick($event)"
         @enter-vr="handleEnterVR()"
         @exit-vr="handleExitVR()"
+        @loaded="onResourceLoaded()"
         :vr-mode-ui="scene.vrModeUi"
         :cursor="scene.cursor"
-        inspector
-        stats>
-        <!-- <a-assets>
-          <img id="logo" :src="logoImage">
-        </a-assets> -->
+        inspector>
+        <a-assets>
+          <img id="panorama" :src="panoramaImage">
+          <img id="tag" :src="tagImage">
+        </a-assets>
         <!-- Basic plane. -->
-        <a-sky
-          :src="panoramaImage">
-        </a-sky>
+        <a-sky src="#panorama"></a-sky>
         <a-camera
           :reverse-mouse-drag="camera.shouldReverseDrag"
           @componentchanged="onCameraChange($event)">
@@ -52,9 +51,9 @@
             </a-text>
             <a-image
               :src="selectedMarker.image"
-              width="20"
-              height="20"
-              position="0 0 7">
+              :width="markerConfig.tag.imageWidth"
+              :height="markerConfig.tag.imageHeight"
+              :position="markerConfig.tag.imagePosition">
             </a-image>
           </a-plane>
         </a-entity>
@@ -121,6 +120,7 @@ export default {
       isUsingVRMode: false,
       shouldModalShow: false,
       panoramaImage: panoramaImage,
+      tagImage: tagImage,
       logoImage: logoImage,
       scene: {
         vrModeUi: 'enabled: true',
@@ -162,13 +162,16 @@ export default {
           planePosition: '0 12 -70',
           planeColor: '#000',
           fontSize: '6',
-          fontPosition: '-1 -10.6 65'
+          fontPosition: '-1 -10.6 65',
+          imageWidth: 20,
+          imageHeight: 20,
+          imagePosition: '0 0 7'
         }
       },
       markers: [{
         id: 1,
         type: 'tag',
-        src: tagImage,
+        src: '#tag',
         position: '0 0 -8',
         text: 'Vue with aframe!',
         image: logoImage
@@ -183,6 +186,10 @@ export default {
   },
 
   methods: {
+    onResourceLoaded () {
+      console.log('loaded')
+    },
+
     onSceneClick (e) {
       // console.log('click scene: ', e)
     },
