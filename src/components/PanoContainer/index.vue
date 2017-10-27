@@ -5,15 +5,17 @@
       @click="onSceneClick($event)"
       @enter-vr="handleEnterVR()"
       @exit-vr="handleExitVR()"
+      @loaded="onResourceLoaded()"
       :vr-mode-ui="scene.vrModeUi"
       :cursor="scene.cursor"
       inspector
       stats>
-      <a-sky
-        :src="panoramaImage">
-      </a-sky>
-      <pano-camera>
-      </pano-camera>
+      <a-assets>
+        <img id="panorama" :src="panoramaImage">
+        <img id="tag" :src="tagImage">
+      </a-assets>
+      <a-sky src="#panorama"></a-sky>
+      <pano-camera></pano-camera>
       <pano-markers></pano-markers>
     </a-scene>
   </div>
@@ -26,6 +28,7 @@ import PanoMarkers from '@/components/PanoContainer/PanoMarkers'
 import PanoCamera from '@/components/PanoContainer/PanoCamera'
 
 import panoramaImage from '@/assets/panorama1.jpg'
+import tagImage from '@/assets/tag.png'
 
 export default {
   name: 'PanoContainer',
@@ -39,6 +42,7 @@ export default {
     return {
       // isUsingVRMode: false,
       panoramaImage: panoramaImage,
+      tagImage: tagImage,
       scene: {
         vrModeUi: 'enabled: true',
         cursor: 'rayOrigin: mouse'
@@ -54,8 +58,13 @@ export default {
 
   methods: {
     ...mapActions([
-      'setIsUsingVRMode'
+      'setIsUsingVRMode',
+      'setShouldModalShow'
     ]),
+
+    onResourceLoaded () {
+      console.log('loaded')
+    },
 
     onSceneClick (e) {
       // console.log('click scene: ', e)
@@ -69,6 +78,7 @@ export default {
 
     handleExitVR () {
       this.setIsUsingVRMode(false)
+      this.setShouldModalShow(false)
     }
   }
 }
