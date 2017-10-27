@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <!-- <router-view/> -->
     <!-- <div class="aframe-container"> -->
       <a-scene
         ref="scene"
@@ -36,10 +34,9 @@
             </a-animation>
           </a-cursor>
         </a-camera>
-        <!-- Textured plane parallel to ground. -->
-        <a-entity v-if="isUsingVRMode">
+        <a-entity>
           <a-plane
-            v-if="selectedMarker.type === 'tag'"
+            v-if="isUsingVRMode && selectedMarker.type === 'tag'"
             :width="markerConfig.tag.planeWidth"
             :height="markerConfig.tag.planeHeight"
             :position="markerConfig.tag.planePosition"
@@ -56,8 +53,6 @@
               :position="markerConfig.tag.imagePosition">
             </a-image>
           </a-plane>
-        </a-entity>
-        <a-entity>
           <a-image
             v-for="marker in markers" :key="marker.id"
             :width="markerConfig.width"
