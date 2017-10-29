@@ -47,7 +47,7 @@
               :position="markerConfig.tag.fontPosition">
             </a-text>
             <a-image
-              :src="selectedMarker.image"
+              :src="selectedMarker.imageSrc"
               :width="markerConfig.tag.imageWidth"
               :height="markerConfig.tag.imageHeight"
               :position="markerConfig.tag.imagePosition">
@@ -86,7 +86,8 @@
         v-show="shouldModalShow"
         @closeModal="closeModal()">
         <template slot="body">
-          in modal
+          <img :src="selectedMarker.imageSrc">
+          <p>{{ selectedMarker.text}}</p>
         </template>
       </i-modal>
     <!-- </div> -->
@@ -169,7 +170,7 @@ export default {
         src: '#tag',
         position: '0 0 -8',
         text: 'Vue with aframe!',
-        image: logoImage
+        imageSrc: logoImage
       }],
       selectedMarker: {}
     }
@@ -190,21 +191,27 @@ export default {
     },
 
     onMarkerClick (marker, e) {
-      console.log('click: ', marker)
-      console.log('click event', e)
+      if (this.isUsingVRMode) {
+        return
+      }
+
       this.shouldModalShow = true
     },
 
     onMarkerMouseenter (marker, e) {
-      console.log('mouse enter', marker)
-      console.log('mouse enter event', e)
+      if (this.shouldModalShow) {
+        return
+      }
+
       e.currentTarget.setAttribute('opacity', this.markerConfig.activeOpacity)
       this.selectedMarker = marker
     },
 
     onMarkerMouseleave (marker, e) {
-      console.log('mouse leave', marker)
-      console.log('mouse leave event', e)
+      if (this.shouldModalShow) {
+        return
+      }
+
       e.currentTarget.setAttribute('opacity', this.markerConfig.initialOpacity)
       this.selectedMarker = {}
     },
