@@ -12,7 +12,7 @@
         :position="markerConfig.tag.fontPosition">
       </a-text>
       <a-image
-        :src="selectedMarker.image"
+        :src="selectedMarker.imageSrc"
         :width="markerConfig.tag.imageWidth"
         :height="markerConfig.tag.imageHeight"
         :position="markerConfig.tag.imagePosition">
@@ -44,8 +44,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import logoImage from '@/assets/logo.png'
-
 export default {
   name: 'PanoMarkers',
 
@@ -76,27 +74,22 @@ export default {
           imageHeight: 20,
           imagePosition: '0 0 7'
         }
-      },
-      markers: [{
-        id: 1,
-        type: 'tag',
-        src: '#tag',
-        position: '0 0 -8',
-        text: 'Vue with aframe!',
-        image: logoImage
-      }],
-      selectedMarker: {}
+      }
     }
   },
 
   computed: {
     ...mapGetters([
+      'markers',
+      'selectedMarker',
+      'shouldModalShow',
       'isUsingVRMode'
     ])
   },
 
   methods: {
     ...mapActions([
+      'setSelectedMarker',
       'setShouldModalShow'
     ]),
 
@@ -105,23 +98,32 @@ export default {
     },
 
     onMarkerClick (marker, e) {
-      console.log('click: ', marker)
-      console.log('click event', e)
+      if (this.isUsingVRMode) {
+        return
+      }
+
+      this.setSelectedMarker(marker)
       this.setShouldModalShow(true)
     },
 
     onMarkerMouseenter (marker, e) {
-      console.log('mouse enter', marker)
-      console.log('mouse enter event', e)
+      if (this.shouldModalShow) {
+        return
+      }
+
       e.currentTarget.setAttribute('opacity', this.markerConfig.activeOpacity)
-      this.selectedMarker = marker
+      this.setSelectedMarker(marker)
     },
 
     onMarkerMouseleave (marker, e) {
+      if (this.shouldModalShow) {
+        return
+      }
+
       console.log('mouse leave', marker)
       console.log('mouse leave event', e)
       e.currentTarget.setAttribute('opacity', this.markerConfig.initialOpacity)
-      this.selectedMarker = {}
+      this.setSelectedMarker({})
     }
   }
 }

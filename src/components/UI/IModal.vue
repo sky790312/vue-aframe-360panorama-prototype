@@ -104,7 +104,7 @@ $dark-gray = #58585a
   -webkit-overflow-scrolling: touch
 
   &.white {
-    background-color: alpha($black, 30%)
+    background: alpha($black, 30%)
     color: $black
 
     .modal-content {
@@ -117,7 +117,7 @@ $dark-gray = #58585a
   }
 
   &.black {
-    background-color: alpha($white, 30%)
+    background: alpha($white, 30%)
     color: $white
 
     .modal-content {
@@ -160,7 +160,8 @@ $dark-gray = #58585a
       font-weight: bold
       border: none
       outline: none
-      background-color: transparent
+      background: transparent
+      cursor: pointer
     }
   }
 }

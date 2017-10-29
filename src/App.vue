@@ -9,7 +9,8 @@
       v-show="shouldModalShow"
       @closeModal="closeModal()">
       <template slot="body">
-        in modal
+        <img :src="selectedMarker.imageSrc">
+        <p>{{ selectedMarker.text }}</p>
       </template>
     </i-modal>
   </div>
@@ -43,6 +44,8 @@ export default {
 
   computed: {
     ...mapGetters([
+      'markers',
+      'selectedMarker',
       'shouldModalShow'
     ])
   },
