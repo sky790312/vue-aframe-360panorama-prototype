@@ -13,6 +13,7 @@
         <a-assets>
           <img id="panorama" :src="panoramaImage">
           <img id="tag" :src="tagImage">
+          <img id="point" :src="pointImage">
         </a-assets>
         <!-- Basic plane. -->
         <a-sky src="#panorama"></a-sky>
@@ -36,7 +37,7 @@
         </a-camera>
         <a-entity>
           <a-plane
-            v-if="isUsingVRMode && selectedMarker.type === 'tag'"
+            v-if="shouldVRTagShow"
             :width="markerConfig.tag.planeWidth"
             :height="markerConfig.tag.planeHeight"
             :position="markerConfig.tag.planePosition"
@@ -102,6 +103,7 @@ import IModal from '@/components/UI/IModal'
 
 import panoramaImage from '@/assets/panorama1.jpg'
 import tagImage from '@/assets/tag.png'
+import pointImage from '@/assets/point.png'
 import logoImage from '@/assets/logo.png'
 
 export default {
@@ -117,6 +119,7 @@ export default {
       shouldModalShow: false,
       panoramaImage: panoramaImage,
       tagImage: tagImage,
+      pointImage: pointImage,
       logoImage: logoImage,
       scene: {
         vrModeUi: 'enabled: true',
@@ -171,14 +174,20 @@ export default {
         position: '0 0 -8',
         text: 'Vue with aframe!',
         imageSrc: logoImage
+      }, {
+        id: 1,
+        type: 'point',
+        src: '#point',
+        position: '5 0 -8'
       }],
       selectedMarker: {}
     }
   },
 
-  mounted () {
-    // console.log(this.$refs.scene)
-    // this.$refs.scene.enterVR()
+  computed: {
+    shouldVRTagShow () {
+      return this.isUsingVRMode && this.selectedMarker.type === 'tag'
+    }
   },
 
   methods: {
@@ -195,7 +204,7 @@ export default {
         return
       }
 
-      this.shouldModalShow = true
+      this.handleMarker(marker.type)
     },
 
     onMarkerMouseenter (marker, e) {
@@ -232,6 +241,22 @@ export default {
     handleExitVR () {
       this.isUsingVRMode = false
       this.shouldModalShow = false
+    },
+
+    handleMarker (type) {
+      const marker = {
+        tag: () => this.handleTag(),
+        point: () => this.handlePoint()
+      }
+      return marker[type]()
+    },
+
+    handleTag () {
+      this.shouldModalShow = true
+    },
+
+    handlePoint () {
+      console.log('in handle point')
     }
   }
 }
