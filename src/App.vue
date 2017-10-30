@@ -2,6 +2,7 @@
   <div id="app">
     <!-- <div class="aframe-container"> -->
       <a-scene
+        class="scene"
         ref="scene"
         @click="onSceneClick($event)"
         @enter-vr="handleEnterVR()"
@@ -84,7 +85,7 @@
       </div> -->
       <i-modal
         class="black center"
-        v-show="shouldModalShow"
+        v-show="isModalShow"
         @closeModal="closeModal()">
         <template slot="body">
           <img :src="selectedMarker.imageSrc">
@@ -116,7 +117,7 @@ export default {
   data () {
     return {
       isUsingVRMode: false,
-      shouldModalShow: false,
+      isModalShow: false,
       panoramaImage: panoramaImage,
       tagImage: tagImage,
       pointImage: pointImage,
@@ -171,7 +172,7 @@ export default {
         id: 1,
         type: 'tag',
         src: '#tag',
-        position: '0 0 -8',
+        position: '0 -.5 -8',
         text: 'Vue with aframe!',
         imageSrc: logoImage
       }, {
@@ -208,7 +209,7 @@ export default {
     },
 
     onMarkerMouseenter (marker, e) {
-      if (this.shouldModalShow) {
+      if (this.isModalShow) {
         return
       }
 
@@ -217,7 +218,7 @@ export default {
     },
 
     onMarkerMouseleave (marker, e) {
-      if (this.shouldModalShow) {
+      if (this.isModalShow) {
         return
       }
 
@@ -230,7 +231,7 @@ export default {
     },
 
     closeModal () {
-      this.shouldModalShow = false
+      this.isModalShow = false
     },
 
     handleEnterVR () {
@@ -240,7 +241,7 @@ export default {
 
     handleExitVR () {
       this.isUsingVRMode = false
-      this.shouldModalShow = false
+      this.isModalShow = false
     },
 
     handleMarker (type) {
@@ -252,7 +253,7 @@ export default {
     },
 
     handleTag () {
-      this.shouldModalShow = true
+      this.isModalShow = true
     },
 
     handlePoint () {
@@ -271,10 +272,9 @@ export default {
   color: #2c3e50
   height: 100%
 
-  .aframe-container {
-    // width: 50vw
-    // height: 100vh
-    // overflow: hidden
+  .scene {
+    position: relative
+    z-index: 0
   }
 
   .menu-container {
@@ -303,7 +303,6 @@ export default {
       background-image: url('./assets/vr.svg')
     }
   }
-
-
 }
+
 </style>
