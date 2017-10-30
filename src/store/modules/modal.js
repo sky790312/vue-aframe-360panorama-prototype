@@ -8,12 +8,12 @@ const getters = {
 
 const actions = {
   setIsModalShow ({ commit }, isModalShow = false) {
-    commit('SET_SHOULD_MODAL_SHOW', isModalShow)
+    commit('SET_IS_MODAL_SHOW', isModalShow)
   }
 }
 
 const mutations = {
-  SET_SHOULD_MODAL_SHOW (state, isModalShow = false) {
+  SET_IS_MODAL_SHOW (state, isModalShow = false) {
     state.isModalShow = isModalShow
   }
 }
