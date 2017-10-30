@@ -1,7 +1,7 @@
 <template>
   <a-entity id="pano-markers">
     <a-plane
-      v-if="shouldVRTagShow()"
+      v-if="shouldVRTagShow"
       :width="markerConfig.tag.planeWidth"
       :height="markerConfig.tag.planeHeight"
       :position="markerConfig.tag.planePosition"
@@ -18,26 +18,28 @@
         :position="markerConfig.tag.imagePosition">
       </a-image>
     </a-plane>
-    <a-image
-      v-for="marker in markers" :key="marker.id"
-      :width="markerConfig.width"
-      :height="markerConfig.height"
-      :color="markerConfig.color"
-      :opacity="markerConfig.initialOpacity"
-      :transparent="markerConfig.isTransparent"
-      :src="marker.src"
-      :position="marker.position"
-      @click="onMarkerClick(marker, $event)"
-      @mouseenter="onMarkerMouseenter(marker, $event)"
-      @mouseleave="onMarkerMouseleave(marker, $event)">
-      <a-animation
-        :attribute="markerConfig.animation.attribute"
-        :from="markerConfig.animation.from"
-        :to="markerConfig.animation.to"
-        :dur="markerConfig.animation.duration"
-        :repeat="markerConfig.animation.repeat">
-      </a-animation>
-    </a-image>
+    <a-entity>
+      <a-image
+        v-for="marker in markers" :key="marker.id"
+        :width="markerConfig.width"
+        :height="markerConfig.height"
+        :color="markerConfig.color"
+        :opacity="markerConfig.initialOpacity"
+        :transparent="markerConfig.isTransparent"
+        :src="marker.src"
+        :position="marker.position"
+        @click="onMarkerClick(marker, $event)"
+        @mouseenter="onMarkerMouseenter(marker, $event)"
+        @mouseleave="onMarkerMouseleave(marker, $event)">
+        <a-animation
+          :attribute="markerConfig.animation.attribute"
+          :from="markerConfig.animation.from"
+          :to="markerConfig.animation.to"
+          :dur="markerConfig.animation.duration"
+          :repeat="markerConfig.animation.repeat">
+        </a-animation>
+      </a-image>
+    </a-entity>
   </a-entity>
 </template>
 
@@ -84,7 +86,11 @@ export default {
       'selectedMarker',
       'shouldModalShow',
       'isUsingVRMode'
-    ])
+    ]),
+
+    shouldVRTagShow () {
+      return this.isUsingVRMode && this.selectedMarker.type === 'tag'
+    }
   },
 
   methods: {
@@ -93,17 +99,17 @@ export default {
       'setShouldModalShow'
     ]),
 
-    shouldVRTagShow () {
-      return this.isUsingVRMode && this.selectedMarker.type === 'tag'
-    },
-
     onMarkerClick (marker, e) {
       if (this.isUsingVRMode) {
         return
       }
 
       this.setSelectedMarker(marker)
-      this.setShouldModalShow(true)
+      this.handleMarker(marker.type)
+
+      // if (marker.type === 'tag') {
+      //   this.setShouldModalShow(true)
+      // }
     },
 
     onMarkerMouseenter (marker, e) {
@@ -120,10 +126,24 @@ export default {
         return
       }
 
-      console.log('mouse leave', marker)
-      console.log('mouse leave event', e)
       e.currentTarget.setAttribute('opacity', this.markerConfig.initialOpacity)
       this.setSelectedMarker({})
+    },
+
+    handleMarker (type) {
+      const marker = {
+        tag: () => this.handleTag(),
+        point: () => this.handlePoint()
+      }
+      return marker[type]()
+    },
+
+    handleTag () {
+      this.setShouldModalShow(true)
+    },
+
+    handlePoint () {
+      console.log('in handle point')
     }
   }
 }

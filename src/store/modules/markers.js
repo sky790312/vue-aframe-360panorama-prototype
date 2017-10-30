@@ -8,6 +8,11 @@ const state = {
     position: '0 0 -8',
     text: 'Vue with aframe!',
     imageSrc: logoImage
+  }, {
+    id: 2,
+    type: 'point',
+    src: '#point',
+    position: '5 0 -8'
   }],
   selectedMarker: {}
 }

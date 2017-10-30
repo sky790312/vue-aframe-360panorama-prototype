@@ -13,6 +13,7 @@
       <a-assets>
         <img id="panorama" :src="panoramaImage">
         <img id="tag" :src="tagImage">
+        <img id="point" :src="pointImage">
       </a-assets>
       <a-sky src="#panorama"></a-sky>
       <pano-camera></pano-camera>
@@ -29,6 +30,7 @@ import PanoCamera from '@/components/PanoContainer/PanoCamera'
 
 import panoramaImage from '@/assets/panorama1.jpg'
 import tagImage from '@/assets/tag.png'
+import pointImage from '@/assets/point.png'
 
 export default {
   name: 'PanoContainer',
@@ -43,6 +45,7 @@ export default {
       // isUsingVRMode: false,
       panoramaImage: panoramaImage,
       tagImage: tagImage,
+      pointImage: pointImage,
       scene: {
         vrModeUi: 'enabled: true',
         cursor: 'rayOrigin: mouse'
