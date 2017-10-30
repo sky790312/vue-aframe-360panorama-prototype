@@ -18,28 +18,26 @@
         :position="markerConfig.tag.imagePosition">
       </a-image>
     </a-plane>
-    <a-entity>
-      <a-image
-        v-for="marker in markers" :key="marker.id"
-        :width="markerConfig.width"
-        :height="markerConfig.height"
-        :color="markerConfig.color"
-        :opacity="markerConfig.initialOpacity"
-        :transparent="markerConfig.isTransparent"
-        :src="marker.src"
-        :position="marker.position"
-        @click="onMarkerClick(marker, $event)"
-        @mouseenter="onMarkerMouseenter(marker, $event)"
-        @mouseleave="onMarkerMouseleave(marker, $event)">
-        <a-animation
-          :attribute="markerConfig.animation.attribute"
-          :from="markerConfig.animation.from"
-          :to="markerConfig.animation.to"
-          :dur="markerConfig.animation.duration"
-          :repeat="markerConfig.animation.repeat">
-        </a-animation>
-      </a-image>
-    </a-entity>
+    <a-image
+      v-for="marker in markers" :key="marker.id"
+      :width="markerConfig.width"
+      :height="markerConfig.height"
+      :color="markerConfig.color"
+      :opacity="markerConfig.initialOpacity"
+      :transparent="markerConfig.isTransparent"
+      :src="marker.src"
+      :position="marker.position"
+      @click="onMarkerClick(marker, $event)"
+      @mouseenter="onMarkerMouseenter(marker, $event)"
+      @mouseleave="onMarkerMouseleave(marker, $event)">
+      <a-animation
+        :attribute="markerConfig.animation.attribute"
+        :from="markerConfig.animation.from"
+        :to="markerConfig.animation.to"
+        :dur="markerConfig.animation.duration"
+        :repeat="markerConfig.animation.repeat">
+      </a-animation>
+    </a-image>
   </a-entity>
 </template>
 
@@ -106,10 +104,6 @@ export default {
 
       this.setSelectedMarker(marker)
       this.handleMarker(marker.type)
-
-      // if (marker.type === 'tag') {
-      //   this.setShouldModalShow(true)
-      // }
     },
 
     onMarkerMouseenter (marker, e) {
