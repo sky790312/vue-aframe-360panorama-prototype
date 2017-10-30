@@ -6,7 +6,7 @@
     <menu-container></menu-container>
     <i-modal
       class="black center"
-      v-show="shouldModalShow"
+      v-show="isModalShow"
       @closeModal="closeModal()">
       <template slot="body">
         <img :src="selectedMarker.imageSrc">
@@ -46,17 +46,17 @@ export default {
     ...mapGetters([
       'markers',
       'selectedMarker',
-      'shouldModalShow'
+      'isModalShow'
     ])
   },
 
   methods: {
     ...mapActions([
-      'setShouldModalShow'
+      'setIsModalShow'
     ]),
 
     closeModal () {
-      this.setShouldModalShow(false)
+      this.setIsModalShow(false)
     }
   },
 

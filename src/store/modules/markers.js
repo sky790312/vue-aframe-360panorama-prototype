@@ -5,7 +5,7 @@ const state = {
     id: 1,
     type: 'tag',
     src: '#tag',
-    position: '0 0 -8',
+    position: '0 -.5 -8',
     text: 'Vue with aframe!',
     imageSrc: logoImage
   }, {

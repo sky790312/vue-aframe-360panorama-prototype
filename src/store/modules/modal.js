@@ -1,20 +1,20 @@
 const state = {
-  shouldModalShow: false
+  isModalShow: false
 }
 
 const getters = {
-  shouldModalShow: state => state.shouldModalShow
+  isModalShow: state => state.isModalShow
 }
 
 const actions = {
-  setShouldModalShow ({ commit }, shouldModalShow = false) {
-    commit('SET_SHOULD_MODAL_SHOW', shouldModalShow)
+  setIsModalShow ({ commit }, isModalShow = false) {
+    commit('SET_SHOULD_MODAL_SHOW', isModalShow)
   }
 }
 
 const mutations = {
-  SET_SHOULD_MODAL_SHOW (state, shouldModalShow = false) {
-    state.shouldModalShow = shouldModalShow
+  SET_SHOULD_MODAL_SHOW (state, isModalShow = false) {
+    state.isModalShow = isModalShow
   }
 }
 

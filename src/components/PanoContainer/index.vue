@@ -62,7 +62,7 @@ export default {
   methods: {
     ...mapActions([
       'setIsUsingVRMode',
-      'setShouldModalShow'
+      'setIsModalShow'
     ]),
 
     onResourceLoaded () {
@@ -81,7 +81,7 @@ export default {
 
     handleExitVR () {
       this.setIsUsingVRMode(false)
-      this.setShouldModalShow(false)
+      this.setIsModalShow(false)
     }
   }
 }
@@ -89,6 +89,8 @@ export default {
 
 <style lang="stylus" scoped>
 #pano-container {
+  position: relative
   height: 100vh
+  z-index: 1
 }
 </style>

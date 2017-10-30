@@ -82,7 +82,7 @@ export default {
     ...mapGetters([
       'markers',
       'selectedMarker',
-      'shouldModalShow',
+      'isModalShow',
       'isUsingVRMode'
     ]),
 
@@ -94,7 +94,7 @@ export default {
   methods: {
     ...mapActions([
       'setSelectedMarker',
-      'setShouldModalShow'
+      'setIsModalShow'
     ]),
 
     onMarkerClick (marker, e) {
@@ -107,7 +107,7 @@ export default {
     },
 
     onMarkerMouseenter (marker, e) {
-      if (this.shouldModalShow) {
+      if (this.isModalShow) {
         return
       }
 
@@ -116,7 +116,7 @@ export default {
     },
 
     onMarkerMouseleave (marker, e) {
-      if (this.shouldModalShow) {
+      if (this.isModalShow) {
         return
       }
 
@@ -133,7 +133,7 @@ export default {
     },
 
     handleTag () {
-      this.setShouldModalShow(true)
+      this.setIsModalShow(true)
     },
 
     handlePoint () {
