@@ -12,12 +12,15 @@
         :cursor="scene.cursor"
         inspector>
         <a-assets>
-          <img id="panorama" :src="panoramaImage">
+          <img
+            v-for="panorama in panoramas"
+            :key="panorama.id"
+            :src="panorama.imageSrc">
           <img id="tag" :src="tagImage">
           <img id="point" :src="pointImage">
         </a-assets>
         <!-- Basic plane. -->
-        <a-sky src="#panorama"></a-sky>
+        <a-sky :src="selectedPanorama.imageSrc"></a-sky>
         <a-camera
           :reverse-mouse-drag="camera.shouldReverseDrag"
           @componentchanged="onCameraChange($event)">
@@ -56,13 +59,14 @@
             </a-image>
           </a-plane>
           <a-image
-            v-for="marker in markers" :key="marker.id"
+            v-for="marker in markers"
+            :key="marker.id"
             :width="markerConfig.width"
             :height="markerConfig.height"
             :color="markerConfig.color"
             :opacity="markerConfig.initialOpacity"
             :transparent="markerConfig.isTransparent"
-            :src="marker.src"
+            :src="marker.iconSrc"
             :position="marker.position"
             @click="onMarkerClick(marker, $event)"
             @mouseenter="onMarkerMouseenter(marker, $event)"
@@ -102,7 +106,8 @@ import AFRAME from 'aframe'
 /* eslint-enable */
 import IModal from '@/components/UI/IModal'
 
-import panoramaImage from '@/assets/panorama1.jpg'
+import panoramaImage1 from '@/assets/panorama1.jpg'
+import panoramaImage2 from '@/assets/panorama2.jpg'
 import tagImage from '@/assets/tag.png'
 import pointImage from '@/assets/point.png'
 import logoImage from '@/assets/logo.png'
@@ -118,7 +123,7 @@ export default {
     return {
       isUsingVRMode: false,
       isModalShow: false,
-      panoramaImage: panoramaImage,
+      // panoramaImage: panoramaImage,
       tagImage: tagImage,
       pointImage: pointImage,
       logoImage: logoImage,
@@ -168,19 +173,33 @@ export default {
           imagePosition: '0 0 7'
         }
       },
+      panoramas: [{
+        id: 1,
+        title: 'panorama1',
+        rotation: '0 0 0',
+        imageSrc: panoramaImage1
+        // imageSrc: 'http://www.easypano.com/images/pw/v3/banner.jpg'
+      }, {
+        id: 2,
+        title: 'panorama2',
+        rotation: '0 0 0',
+        imageSrc: panoramaImage2
+      }],
       markers: [{
         id: 1,
         type: 'tag',
-        src: '#tag',
+        iconSrc: '#tag',
         position: '0 -.5 -8',
         text: 'Vue with aframe!',
         imageSrc: logoImage
       }, {
-        id: 1,
+        id: 2,
         type: 'point',
-        src: '#point',
+        iconSrc: '#point',
+        nextPanoramaId: 2,
         position: '5 0 -8'
       }],
+      selectedPanorama: {},
       selectedMarker: {}
     }
   },
@@ -257,8 +276,12 @@ export default {
     },
 
     handlePoint () {
-      console.log('in handle point')
+      this.selectedPanorama = this.panoramas.find(panorama => panorama.id === this.selectedMarker.nextPanoramaId)
     }
+  },
+
+  beforeMount () {
+    this.selectedPanorama = this.panoramas[0]
   }
 }
 </script>
