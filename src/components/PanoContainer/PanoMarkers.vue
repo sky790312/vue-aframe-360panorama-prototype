@@ -26,7 +26,7 @@
       :color="markerConfig.color"
       :opacity="markerConfig.initialOpacity"
       :transparent="markerConfig.isTransparent"
-      :src="marker.src"
+      :src="marker.iconSrc"
       :position="marker.position"
       @click="onMarkerClick(marker, $event)"
       @mouseenter="onMarkerMouseenter(marker, $event)"
