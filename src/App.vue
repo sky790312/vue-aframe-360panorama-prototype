@@ -188,14 +188,14 @@ export default {
       markers: [{
         id: 1,
         type: 'tag',
-        iconSrc: '#tag',
+        iconSrc: tagImage,
         position: '0 -.5 -8',
         text: 'Vue with aframe!',
         imageSrc: logoImage
       }, {
         id: 2,
         type: 'point',
-        iconSrc: '#point',
+        iconSrc: pointImage,
         nextPanoramaId: 2,
         position: '5 0 -8'
       }],
