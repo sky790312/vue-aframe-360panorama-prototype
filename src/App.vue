@@ -81,12 +81,24 @@
           </a-image>
         </a-entity>
       </a-scene>
-      <!-- <div class="menu-container">
+      <div class="menu-container">
         <i
           class="i-icon i-icon-2x i-icon-vr"
           @click="handleEnterVR()">
         </i>
-      </div> -->
+      </div>
+      <div class="pano-thumb-list">
+        <div
+          v-for="panorama in panoramas"
+          class="thumbnail"
+          :key="panorama.id"
+          @click="onThumbnailClick(panorama)">
+          <img
+            :src="panorama.imageSrc"
+            class="thumbnail-img">
+          <p class="thumbnail-title">{{ panorama.title }}</p>
+        </div>
+      </div>
       <i-modal
         class="black center"
         v-show="isModalShow"
@@ -128,7 +140,7 @@ export default {
       pointImage: pointImage,
       logoImage: logoImage,
       scene: {
-        vrModeUi: 'enabled: true',
+        vrModeUi: 'enabled: false',
         cursor: 'rayOrigin: mouse'
       },
       camera: {
@@ -227,6 +239,10 @@ export default {
       this.handleMarker(marker.type)
     },
 
+    onThumbnailClick (panorama) {
+      this.selectedPanorama = panorama
+    },
+
     onMarkerMouseenter (marker, e) {
       if (this.isModalShow) {
         return
@@ -305,6 +321,35 @@ export default {
     top: 20px
     right: 20px
     z-index: 1
+  }
+
+  .pano-thumb-list {
+    position: absolute
+    bottom: 0
+    display: flex
+    justify-content: center
+    width: 100%
+    background-color: rgba(0 0 0, .7)
+    z-index: 1
+    padding: 20px
+
+    .thumbnail {
+      cursor: pointer
+      margin: 0 20px
+
+      &:hover {
+        opacity: .8
+      }
+    }
+
+    .thumbnail-img {
+      width: 100px
+      height: 100px
+    }
+
+    .thumbnail-title {
+      color: #fff
+    }
   }
 
   .i-icon {
