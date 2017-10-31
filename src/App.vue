@@ -4,6 +4,7 @@
     <!-- <router-view/> -->
     <pano-container></pano-container>
     <menu-container></menu-container>
+    <pano-thumb-list></pano-thumb-list>
     <i-modal
       class="black center"
       v-show="isModalShow"
@@ -24,6 +25,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 import PanoContainer from '@/components/PanoContainer'
 import MenuContainer from '@/components/MenuContainer'
+import PanoThumbList from '@/components/PanoThumbList'
 
 import IModal from '@/components/UI/IModal'
 
@@ -33,6 +35,7 @@ export default {
   components: {
     PanoContainer,
     MenuContainer,
+    PanoThumbList,
     IModal
   },
 

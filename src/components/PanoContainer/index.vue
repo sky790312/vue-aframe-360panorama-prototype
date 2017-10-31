@@ -47,7 +47,7 @@ export default {
       tagImage: tagImage,
       pointImage: pointImage,
       scene: {
-        vrModeUi: 'enabled: true',
+        vrModeUi: 'enabled: false',
         cursor: 'rayOrigin: mouse'
       }
     }
