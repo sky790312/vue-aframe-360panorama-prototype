@@ -12,6 +12,7 @@ const state = {
     id: 2,
     type: 'point',
     src: '#point',
+    nextPanoramaId: 2,
     position: '5 0 -8'
   }],
   selectedMarker: {}

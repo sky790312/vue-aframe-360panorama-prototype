@@ -11,11 +11,14 @@
       inspector
       stats>
       <a-assets>
-        <img id="panorama" :src="panoramaImage">
+        <img
+          v-for="panorama in panoramas"
+          :key="panorama.id"
+          :src="panorama.imageSrc">
         <img id="tag" :src="tagImage">
         <img id="point" :src="pointImage">
       </a-assets>
-      <a-sky src="#panorama"></a-sky>
+      <a-sky :src="selectedPanorama.imageSrc"></a-sky>
       <pano-camera></pano-camera>
       <pano-markers></pano-markers>
     </a-scene>
@@ -28,7 +31,6 @@ import { mapGetters, mapActions } from 'vuex'
 import PanoMarkers from '@/components/PanoContainer/PanoMarkers'
 import PanoCamera from '@/components/PanoContainer/PanoCamera'
 
-import panoramaImage from '@/assets/panorama1.jpg'
 import tagImage from '@/assets/tag.png'
 import pointImage from '@/assets/point.png'
 
@@ -42,8 +44,6 @@ export default {
 
   data () {
     return {
-      // isUsingVRMode: false,
-      panoramaImage: panoramaImage,
       tagImage: tagImage,
       pointImage: pointImage,
       scene: {
@@ -55,12 +55,15 @@ export default {
 
   computed: {
     ...mapGetters([
+      'panoramas',
+      'selectedPanorama',
       'isUsingVRMode'
     ])
   },
 
   methods: {
     ...mapActions([
+      'setSelectedPanorama',
       'setIsUsingVRMode',
       'setIsModalShow'
     ]),
@@ -83,6 +86,10 @@ export default {
       this.setIsUsingVRMode(false)
       this.setIsModalShow(false)
     }
+  },
+
+  beforeMount () {
+    this.setSelectedPanorama(this.panoramas[0])
   }
 }
 </script>

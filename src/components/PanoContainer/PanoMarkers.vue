@@ -19,7 +19,8 @@
       </a-image>
     </a-plane>
     <a-image
-      v-for="marker in markers" :key="marker.id"
+      v-for="marker in markers"
+      :key="marker.id"
       :width="markerConfig.width"
       :height="markerConfig.height"
       :color="markerConfig.color"
@@ -80,6 +81,7 @@ export default {
 
   computed: {
     ...mapGetters([
+      'panoramas',
       'markers',
       'selectedMarker',
       'isModalShow',
@@ -93,6 +95,7 @@ export default {
 
   methods: {
     ...mapActions([
+      'setSelectedPanorama',
       'setSelectedMarker',
       'setIsModalShow'
     ]),
@@ -137,7 +140,8 @@ export default {
     },
 
     handlePoint () {
-      console.log('in handle point')
+      const foundPanorama = this.panoramas.find(panorama => panorama.id === this.selectedMarker.nextPanoramaId)
+      this.setSelectedPanorama(foundPanorama)
     }
   }
 }
