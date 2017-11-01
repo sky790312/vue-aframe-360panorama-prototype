@@ -20,7 +20,7 @@
           <img id="point" :src="pointImage">
         </a-assets>
         <!-- Basic plane. -->
-        <a-sky :src="selectedPanorama.imageSrc"></a-sky>
+        <a-sky :src="currentPanorama.imageSrc"></a-sky>
         <a-camera
           :reverse-mouse-drag="camera.shouldReverseDrag"
           @componentchanged="onCameraChange($event)">
@@ -41,25 +41,25 @@
         </a-camera>
         <a-entity>
           <a-plane
-            v-if="shouldVRTagShow"
+            v-if="isVRTagShow"
             :width="markerConfig.tag.planeWidth"
             :height="markerConfig.tag.planeHeight"
             :position="markerConfig.tag.planePosition"
             :color="markerConfig.tag.planeColor">
             <a-text
-              :value="selectedMarker.text"
+              :value="currentMarker.text"
               :width="markerConfig.tag.fontSize"
               :position="markerConfig.tag.fontPosition">
             </a-text>
             <a-image
-              :src="selectedMarker.imageSrc"
+              :src="currentMarker.imageSrc"
               :width="markerConfig.tag.imageWidth"
               :height="markerConfig.tag.imageHeight"
               :position="markerConfig.tag.imagePosition">
             </a-image>
           </a-plane>
           <a-image
-            v-for="marker in markers"
+            v-for="marker in currentPanorama.markers"
             :key="marker.id"
             :width="markerConfig.width"
             :height="markerConfig.height"
@@ -104,8 +104,8 @@
         v-show="isModalShow"
         @closeModal="closeModal()">
         <template slot="body">
-          <img :src="selectedMarker.imageSrc">
-          <p>{{ selectedMarker.text}}</p>
+          <img :src="currentMarker.imageSrc">
+          <p>{{ currentMarker.text}}</p>
         </template>
       </i-modal>
     <!-- </div> -->
@@ -134,6 +134,7 @@ export default {
   data () {
     return {
       isUsingVRMode: false,
+      isVRTagShow: false,
       isModalShow: false,
       // panoramaImage: panoramaImage,
       tagImage: tagImage,
@@ -186,40 +187,46 @@ export default {
         }
       },
       panoramas: [{
-        id: 1,
+        id: 'pano1',
         title: 'panorama1',
         rotation: '0 0 0',
-        imageSrc: panoramaImage1
-        // imageSrc: 'http://www.easypano.com/images/pw/v3/banner.jpg'
+        imageSrc: panoramaImage1,
+        markers: [{
+          id: 'pano1tag1',
+          type: 'tag',
+          iconSrc: tagImage,
+          position: '0 -.5 -8',
+          text: 'Vue with aframe!',
+          imageSrc: logoImage
+        }, {
+          id: 'pano1point1',
+          type: 'point',
+          iconSrc: pointImage,
+          nextPanoramaId: 'pano2',
+          position: '5 0 -8'
+        }]
       }, {
-        id: 2,
+        id: 'pano2',
         title: 'panorama2',
         rotation: '0 0 0',
-        imageSrc: panoramaImage2
+        imageSrc: panoramaImage2,
+        markers: [{
+          id: 'pano2point1',
+          type: 'point',
+          iconSrc: pointImage,
+          nextPanoramaId: 'pano1',
+          position: '3 -.5 -8'
+        }]
       }],
-      markers: [{
-        id: 1,
-        type: 'tag',
-        iconSrc: tagImage,
-        position: '0 -.5 -8',
-        text: 'Vue with aframe!',
-        imageSrc: logoImage
-      }, {
-        id: 2,
-        type: 'point',
-        iconSrc: pointImage,
-        nextPanoramaId: 2,
-        position: '5 0 -8'
-      }],
-      selectedPanorama: {},
-      selectedMarker: {}
+      currentPanorama: {},
+      currentMarker: {}
     }
   },
 
   computed: {
-    shouldVRTagShow () {
-      return this.isUsingVRMode && this.selectedMarker.type === 'tag'
-    }
+    // isVRTagShow () {
+    //   return this.isUsingVRMode && this.currentMarker.type === 'tag'
+    // }
   },
 
   methods: {
@@ -232,15 +239,17 @@ export default {
     },
 
     onMarkerClick (marker, e) {
+      console.log('in')
       if (this.isUsingVRMode) {
         return
       }
 
+      this.currentMarker = marker
       this.handleMarker(marker.type)
     },
 
     onThumbnailClick (panorama) {
-      this.selectedPanorama = panorama
+      this.currentPanorama = panorama
     },
 
     onMarkerMouseenter (marker, e) {
@@ -249,7 +258,10 @@ export default {
       }
 
       e.currentTarget.setAttribute('opacity', this.markerConfig.activeOpacity)
-      this.selectedMarker = marker
+      if (this.isUsingVRMode) {
+        this.currentMarker = marker
+        this.handleMarker(marker.type)
+      }
     },
 
     onMarkerMouseleave (marker, e) {
@@ -258,7 +270,10 @@ export default {
       }
 
       e.currentTarget.setAttribute('opacity', this.markerConfig.initialOpacity)
-      this.selectedMarker = {}
+      this.currentMarker = {}
+      if (this.isUsingVRMode) {
+        this.isVRTagShow = false
+      }
     },
 
     onCameraChange (e) {
@@ -267,16 +282,19 @@ export default {
 
     closeModal () {
       this.isModalShow = false
+      this.currentMarker = {}
     },
 
     handleEnterVR () {
-      // this.$refs.scene.enterVR()
+      this.$refs.scene.enterVR()
       this.isUsingVRMode = true
     },
 
     handleExitVR () {
       this.isUsingVRMode = false
+      this.isVRTagShow = false
       this.isModalShow = false
+      this.currentMarker = {}
     },
 
     handleMarker (type) {
@@ -288,16 +306,16 @@ export default {
     },
 
     handleTag () {
-      this.isModalShow = true
+      (this.isUsingVRMode) ? this.isVRTagShow = true : this.isModalShow = true
     },
 
     handlePoint () {
-      this.selectedPanorama = this.panoramas.find(panorama => panorama.id === this.selectedMarker.nextPanoramaId)
+      this.currentPanorama = this.panoramas.find(panorama => panorama.id === this.currentMarker.nextPanoramaId)
     }
   },
 
   beforeMount () {
-    this.selectedPanorama = this.panoramas[0]
+    this.currentPanorama = this.panoramas[0]
   }
 }
 </script>
