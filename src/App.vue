@@ -55,11 +55,13 @@ export default {
 
   methods: {
     ...mapActions([
-      'setIsModalShow'
+      'setIsModalShow',
+      'setCurrentMarker'
     ]),
 
     closeModal () {
       this.setIsModalShow(false)
+      this.setCurrentMarker({})
     }
   },
 

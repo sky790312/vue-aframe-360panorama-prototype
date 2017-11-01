@@ -130,6 +130,7 @@ export default {
 
       e.currentTarget.setAttribute('opacity', this.markerConfig.initialOpacity)
       if (this.isUsingVRMode) {
+        this.setCurrentMarker({})
         this.setIsVRTagShow(false)
       }
     },

@@ -64,6 +64,7 @@ export default {
   methods: {
     ...mapActions([
       'setCurrentPanorama',
+      'setCurrentMarker',
       'setIsUsingVRMode',
       'setIsVRTagShow',
       'setIsModalShow'
@@ -87,6 +88,7 @@ export default {
       this.setIsUsingVRMode(false)
       this.setIsVRTagShow(false)
       this.setIsModalShow(false)
+      this.setCurrentMarker({})
     }
   },
 
