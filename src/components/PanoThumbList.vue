@@ -33,17 +33,18 @@ export default {
 
   methods: {
     ...mapActions([
-      'setSelectedPanorama'
+      'setCurrentPanorama'
     ]),
 
     onThumbnailClick (panorama) {
-      this.setSelectedPanorama(panorama)
+      this.setCurrentPanorama(panorama)
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+@import '../css/variables'
 
 #pano-thumb-list {
   position: absolute
@@ -51,7 +52,7 @@ export default {
   display: flex
   justify-content: center
   width: 100%
-  background-color: rgba(0 0 0, .7)
+  background-color: rgba($black, .7)
   z-index: 1
   padding: 20px
 

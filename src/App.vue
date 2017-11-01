@@ -10,8 +10,8 @@
       v-show="isModalShow"
       @closeModal="closeModal()">
       <template slot="body">
-        <img :src="selectedMarker.imageSrc">
-        <p>{{ selectedMarker.text }}</p>
+        <img :src="currentMarker.imageSrc">
+        <p>{{ currentMarker.text }}</p>
       </template>
     </i-modal>
   </div>
@@ -48,7 +48,7 @@ export default {
   computed: {
     ...mapGetters([
       'markers',
-      'selectedMarker',
+      'currentMarker',
       'isModalShow'
     ])
   },
@@ -71,7 +71,9 @@ export default {
 
 <style lang="stylus">
 @import './css'
+</style>
 
+<style lang="stylus" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased

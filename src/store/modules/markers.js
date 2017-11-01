@@ -1,45 +1,28 @@
-import tagImage from '@/assets/tag.png'
-import pointImage from '@/assets/point.png'
-import logoImage from '@/assets/logo.png'
-
 const state = {
-  markers: [{
-    id: 1,
-    type: 'tag',
-    iconSrc: tagImage,
-    position: '0 -.5 -8',
-    text: 'Vue with aframe!',
-    imageSrc: logoImage
-  }, {
-    id: 2,
-    type: 'point',
-    iconSrc: pointImage,
-    nextPanoramaId: 2,
-    position: '5 0 -8'
-  }],
-  selectedMarker: {}
+  currentMarker: {},
+  isVRTagShow: false
 }
 
 const getters = {
-  markers: state => state.markers,
-  selectedMarker: state => state.selectedMarker
+  currentMarker: state => state.currentMarker,
+  isVRTagShow: state => state.isVRTagShow
 }
 
 const actions = {
-  setMarkers ({ commit }, markers = []) {
-    commit('SET_MARKERS', markers)
+  setCurrentMarker ({ commit }, currentMarker = {}) {
+    commit('SET_CURRENT_MARKER', currentMarker)
   },
-  setSelectedMarker ({ commit }, selectedMarker = {}) {
-    commit('SET_SELECTED_MARKER', selectedMarker)
+  setIsVRTagShow ({ commit }, isVRTagShow = false) {
+    commit('SET_IS_VR_TAG_SHOW', isVRTagShow)
   }
 }
 
 const mutations = {
-  SET_MARKERS (state, markers = []) {
-    state.markers = markers
+  SET_CURRENT_MARKER (state, currentMarker = {}) {
+    state.currentMarker = currentMarker
   },
-  SET_SELECTED_MARKER (state, selectedMarker = {}) {
-    state.selectedMarker = selectedMarker
+  SET_IS_VR_TAG_SHOW (state, isVRTagShow = false) {
+    state.isVRTagShow = isVRTagShow
   }
 }
 

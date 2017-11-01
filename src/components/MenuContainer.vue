@@ -27,6 +27,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../css/variables'
+
 #menu-container {
   position: absolute
   top: 20px

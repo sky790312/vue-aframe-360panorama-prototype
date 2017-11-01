@@ -1,25 +1,25 @@
 <template>
   <a-entity id="pano-markers">
     <a-plane
-      v-if="shouldVRTagShow"
+      v-if="isVRTagShow"
       :width="markerConfig.tag.planeWidth"
       :height="markerConfig.tag.planeHeight"
       :position="markerConfig.tag.planePosition"
       :color="markerConfig.tag.planeColor">
       <a-text
-        :value="selectedMarker.text"
+        :value="currentMarker.text"
         :width="markerConfig.tag.fontSize"
         :position="markerConfig.tag.fontPosition">
       </a-text>
       <a-image
-        :src="selectedMarker.imageSrc"
+        :src="currentMarker.imageSrc"
         :width="markerConfig.tag.imageWidth"
         :height="markerConfig.tag.imageHeight"
         :position="markerConfig.tag.imagePosition">
       </a-image>
     </a-plane>
     <a-image
-      v-for="marker in markers"
+      v-for="marker in currentPanorama.markers"
       :key="marker.id"
       :width="markerConfig.width"
       :height="markerConfig.height"
@@ -83,20 +83,22 @@ export default {
     ...mapGetters([
       'panoramas',
       'markers',
-      'selectedMarker',
-      'isModalShow',
+      'currentPanorama',
+      'currentMarker',
+      'isVRTagShow',
       'isUsingVRMode'
-    ]),
+    ])
 
-    shouldVRTagShow () {
-      return this.isUsingVRMode && this.selectedMarker.type === 'tag'
-    }
+    // isVRTagShow () {
+    //   return this.isUsingVRMode && this.currentMarker.type === 'tag'
+    // }
   },
 
   methods: {
     ...mapActions([
-      'setSelectedPanorama',
-      'setSelectedMarker',
+      'setCurrentPanorama',
+      'setCurrentMarker',
+      'setIsVRTagShow',
       'setIsModalShow'
     ]),
 
@@ -105,7 +107,7 @@ export default {
         return
       }
 
-      this.setSelectedMarker(marker)
+      this.setCurrentMarker(marker)
       this.handleMarker(marker.type)
     },
 
@@ -115,7 +117,10 @@ export default {
       }
 
       e.currentTarget.setAttribute('opacity', this.markerConfig.activeOpacity)
-      this.setSelectedMarker(marker)
+      if (this.isUsingVRMode) {
+        this.setCurrentMarker(marker)
+        this.handleMarker(marker.type)
+      }
     },
 
     onMarkerMouseleave (marker, e) {
@@ -124,7 +129,9 @@ export default {
       }
 
       e.currentTarget.setAttribute('opacity', this.markerConfig.initialOpacity)
-      this.setSelectedMarker({})
+      if (this.isUsingVRMode) {
+        this.setIsVRTagShow(false)
+      }
     },
 
     handleMarker (type) {
@@ -136,18 +143,20 @@ export default {
     },
 
     handleTag () {
-      this.setIsModalShow(true)
+      (this.isUsingVRMode) ? this.setIsVRTagShow(true) : this.setIsModalShow(true)
     },
 
     handlePoint () {
-      const foundPanorama = this.panoramas.find(panorama => panorama.id === this.selectedMarker.nextPanoramaId)
-      this.setSelectedPanorama(foundPanorama)
+      const foundPanorama = this.panoramas.find(panorama => panorama.id === this.currentMarker.nextPanoramaId)
+      this.setCurrentPanorama(foundPanorama)
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+@import '../../css/variables'
+
 #pano-marker {
 
 }

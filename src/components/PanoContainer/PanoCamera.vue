@@ -41,7 +41,7 @@ export default {
           form: '1 1 1',
           to: '0.1 0.1 0.1',
           fill: 'backwards',
-          duration: 1500
+          duration: 300
         }
       }
     }
@@ -62,6 +62,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../../css/variables'
+
 #pano-camera {
 
 }

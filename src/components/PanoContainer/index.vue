@@ -18,7 +18,7 @@
         <img id="tag" :src="tagImage">
         <img id="point" :src="pointImage">
       </a-assets>
-      <a-sky :src="selectedPanorama.imageSrc"></a-sky>
+      <a-sky :src="currentPanorama.imageSrc"></a-sky>
       <pano-camera></pano-camera>
       <pano-markers></pano-markers>
     </a-scene>
@@ -56,15 +56,16 @@ export default {
   computed: {
     ...mapGetters([
       'panoramas',
-      'selectedPanorama',
+      'currentPanorama',
       'isUsingVRMode'
     ])
   },
 
   methods: {
     ...mapActions([
-      'setSelectedPanorama',
+      'setCurrentPanorama',
       'setIsUsingVRMode',
+      'setIsVRTagShow',
       'setIsModalShow'
     ]),
 
@@ -84,17 +85,20 @@ export default {
 
     handleExitVR () {
       this.setIsUsingVRMode(false)
+      this.setIsVRTagShow(false)
       this.setIsModalShow(false)
     }
   },
 
   beforeMount () {
-    this.setSelectedPanorama(this.panoramas[0])
+    this.setCurrentPanorama(this.panoramas[0])
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+@import '../../css/variables'
+
 #pano-container {
   position: relative
   height: 100vh
