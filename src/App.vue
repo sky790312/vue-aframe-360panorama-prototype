@@ -42,44 +42,44 @@
         <a-entity>
           <a-plane
             v-if="isVRTagShow"
-            :width="markerConfig.tag.planeWidth"
-            :height="markerConfig.tag.planeHeight"
-            :color="markerConfig.tag.planeColor"
-            :position="markerConfig.tag.planePosition">
+            :width="vTag.planeWidth"
+            :height="vTag.planeHeight"
+            :color="vTag.planeColor"
+            :position="vTag.planePosition">
             <a-text
               :value="currentMarker.text"
-              :width="markerConfig.tag.textSize"
-              :position="markerConfig.tag.textPosition"
-              :color="markerConfig.tag.textColor">
+              :width="vTag.textSize"
+              :position="vTag.textPosition"
+              :color="vTag.textColor">
             </a-text>
             <a-image
               :src="currentMarker.imageSrc"
-              :width="markerConfig.tag.imageWidth"
-              :height="markerConfig.tag.imageHeight"
-              :position="markerConfig.tag.imagePosition">
+              :width="vTag.imageWidth"
+              :height="vTag.imageHeight"
+              :position="vTag.imagePosition">
             </a-image>
           </a-plane>
           <a-entity
             v-if="isUsingVRMode"
             v-for="(panorama, index) in panoramas"
             :key="panorama.id"
-            :position="getPanoramaPosition(index)"
-            @click="onVRMenuClick(panorama)">
+            :position="setPanoramaPosition(index)"
+            @click="onThumbnailClick(panorama)">
             <a-image
               :src="panorama.imageSrc"
-              :width="markerConfig.panosMenu.imageWidth"
-              :height="markerConfig.panosMenu.imageHeight"
-              :position="markerConfig.panosMenu.imagePosition">
+              :width="vThumbnail.imageWidth"
+              :height="vThumbnail.imageHeight"
+              :position="vThumbnail.imagePosition">
             </a-image>
             <a-plane
-              :position="markerConfig.panosMenu.planePosition"
-              :color="markerConfig.panosMenu.planeColor"
-              :width="markerConfig.panosMenu.planeWidth">
+              :position="vThumbnail.planePosition"
+              :color="vThumbnail.planeColor"
+              :width="vThumbnail.planeWidth">
               <a-text
                 :value="panorama.title"
-                :width="markerConfig.panosMenu.textSize"
-                :color="markerConfig.panosMenu.textColor"
-                :position="markerConfig.panosMenu.textPosition">
+                :width="vThumbnail.textSize"
+                :color="vThumbnail.textColor"
+                :position="vThumbnail.textPosition">
               </a-text>
             </a-plane>
           </a-entity>
@@ -112,7 +112,7 @@
           @click="handleEnterVR()">
         </i>
       </div>
-      <div class="pano-thumb-list">
+      <div class="thumbnail-container">
         <div
           v-for="panorama in panoramas"
           class="thumbnail"
@@ -198,30 +198,30 @@ export default {
           to: '1 1 1',
           duration: 1500,
           repeat: 'indefinite'
-        },
-        tag: {
-          planeWidth: 50,
-          planeHeight: 40,
-          planePosition: '0 12 -70',
-          planeColor: '#000',
-          imageWidth: 10,
-          imageHeight: 10,
-          imagePosition: '0 -6 45',
-          textSize: 20,
-          textPosition: '-3.5 -12 45',
-          textColor: '#fff'
-        },
-        panosMenu: {
-          imageWidth: 7,
-          imageHeight: 7,
-          imagePosition: '0 0 45',
-          planePosition: '0 -4 45',
-          planeColor: '#000',
-          planeWidth: '7',
-          textColor: '#fff',
-          textSize: 20,
-          textPosition: '-2.2 .1 0'
         }
+      },
+      vTag: {
+        planeWidth: 50,
+        planeHeight: 40,
+        planePosition: '0 12 -70',
+        planeColor: '#000',
+        imageWidth: 10,
+        imageHeight: 10,
+        imagePosition: '0 -6 45',
+        textSize: 20,
+        textPosition: '-3.5 -12 45',
+        textColor: '#fff'
+      },
+      vThumbnail: {
+        imageWidth: 7,
+        imageHeight: 7,
+        imagePosition: '0 0 45',
+        planePosition: '0 -4 45',
+        planeColor: '#000',
+        planeWidth: '7',
+        textColor: '#fff',
+        textSize: 20,
+        textPosition: '-2.2 .1 0'
       },
       panoramas: [{
         id: 'pano1',
@@ -252,7 +252,7 @@ export default {
           type: 'point',
           iconSrc: pointImage,
           nextPanoramaId: 'pano1',
-          position: '3 -.5 -8'
+          position: '3 1.5 -8'
         }]
       }],
       currentPanorama: {},
@@ -267,7 +267,7 @@ export default {
   },
 
   methods: {
-    getPanoramaPosition (index) {
+    setPanoramaPosition (index) {
       let coordinateX = (index + 1) * 10 - 15
       return `${coordinateX} -7 -70`
     },
@@ -290,10 +290,6 @@ export default {
     },
 
     onThumbnailClick (panorama) {
-      this.currentPanorama = panorama
-    },
-
-    onVRMenuClick (panorama) {
       this.currentPanorama = panorama
     },
 
@@ -386,7 +382,7 @@ export default {
     z-index: 1
   }
 
-  .pano-thumb-list {
+  .thumbnail-container {
     position: absolute
     bottom: 0
     display: flex
