@@ -20,6 +20,8 @@
       </a-assets>
       <a-sky :src="currentPanorama.imageSrc"></a-sky>
       <pano-camera></pano-camera>
+      <v-tag v-if="isVRTagShow"></v-tag>
+      <v-menu v-if="isUsingVRMode"></v-menu>
       <pano-markers></pano-markers>
     </a-scene>
   </div>
@@ -30,6 +32,8 @@ import { mapGetters, mapActions } from 'vuex'
 
 import PanoMarkers from '@/components/PanoContainer/PanoMarkers'
 import PanoCamera from '@/components/PanoContainer/PanoCamera'
+import VTag from '@/components/PanoContainer/VTag'
+import VMenu from '@/components/PanoContainer/VMenu'
 
 import tagImage from '@/assets/tag.png'
 import pointImage from '@/assets/point.png'
@@ -39,7 +43,9 @@ export default {
 
   components: {
     PanoMarkers,
-    PanoCamera
+    PanoCamera,
+    VTag,
+    VMenu
   },
 
   data () {
@@ -57,7 +63,8 @@ export default {
     ...mapGetters([
       'panoramas',
       'currentPanorama',
-      'isUsingVRMode'
+      'isUsingVRMode',
+      'isVRTagShow'
     ])
   },
 
