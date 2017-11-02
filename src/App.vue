@@ -15,8 +15,9 @@
           v-for="panorama in panoramas"
           :key="panorama.id"
           :src="panorama.imageSrc">
-        <img id="tag" :src="tagImage">
-        <img id="point" :src="pointImage">
+        <img :src="tagImage">
+        <img :src="pointImage">
+        <img :src="logoImage">
       </a-assets>
       <a-sky :src="currentPanorama.imageSrc"></a-sky>
       <a-camera
@@ -276,8 +277,16 @@ export default {
       // console.log('click scene: ', e)
     },
 
+    onThumbnailClick (panorama) {
+      if (panorama.id === this.currentPanorama.id) {
+        return
+      }
+
+      this.currentPanorama = panorama
+    },
+
     onMarkerClick (marker, e) {
-      if (this.isUsingVRMode) {
+      if (marker.id === this.currentMarker.id || this.isUsingVRMode) {
         return
       }
 
@@ -285,12 +294,8 @@ export default {
       this.handleMarker(marker.type)
     },
 
-    onThumbnailClick (panorama) {
-      this.currentPanorama = panorama
-    },
-
     onMarkerMouseenter (marker, e) {
-      if (this.isModalShow) {
+      if (marker.id === this.currentMarker.id || this.isModalShow) {
         return
       }
 
@@ -348,6 +353,7 @@ export default {
 
     handlePoint () {
       this.currentPanorama = this.panoramas.find(panorama => panorama.id === this.currentMarker.nextPanoramaId)
+      this.currentMarker = {}
     }
   },
 
