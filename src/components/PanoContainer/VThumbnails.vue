@@ -7,19 +7,19 @@
       @click="onVRMenuClick(panorama)">
       <a-image
         :src="panorama.imageSrc"
-        :width="vMenu.imageWidth"
-        :height="vMenu.imageHeight"
-        :position="vMenu.imagePosition">
+        :width="vThumbnail.imageWidth"
+        :height="vThumbnail.imageHeight"
+        :position="vThumbnail.imagePosition">
       </a-image>
       <a-plane
-        :position="vMenu.planePosition"
-        :color="vMenu.planeColor"
-        :width="vMenu.planeWidth">
+        :position="vThumbnail.planePosition"
+        :color="vThumbnail.planeColor"
+        :width="vThumbnail.planeWidth">
         <a-text
           :value="panorama.title"
-          :width="vMenu.textSize"
-          :color="vMenu.textColor"
-          :position="vMenu.textPosition">
+          :width="vThumbnail.textSize"
+          :color="vThumbnail.textColor"
+          :position="vThumbnail.textPosition">
         </a-text>
       </a-plane>
     </a-entity>
@@ -30,11 +30,11 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'VMenu',
+  name: 'VThumbnails',
 
   data () {
     return {
-      vMenu: {
+      vThumbnail: {
         imageWidth: 7,
         imageHeight: 7,
         imagePosition: '0 0 45',
@@ -62,7 +62,7 @@ export default {
 
     getPanoramaPosition (index) {
       let coordinateX = (index + 1) * 10 - 15
-      return `${coordinateX} -7 -70`
+      return `${coordinateX} -12 -70`
     },
 
     onVRMenuClick (panorama) {

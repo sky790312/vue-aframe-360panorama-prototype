@@ -35,7 +35,7 @@ const state = {
       type: 'point',
       iconSrc: pointImage,
       nextPanoramaId: 'pano1',
-      position: '3 -.5 -8'
+      position: '3 1.5 -8'
     }]
   }],
   currentPanorama: {},
@@ -52,6 +52,7 @@ const actions = {
   setCurrentPanorama ({ commit }, currentPanorama = {}) {
     commit('SET_CURRENT_PANORAMA', currentPanorama)
   },
+
   setIsUsingVRMode ({ commit }, isUsingVRMode = false) {
     commit('SET_IS_USING_VR_MODE', isUsingVRMode)
   }
@@ -61,6 +62,7 @@ const mutations = {
   SET_CURRENT_PANORAMA (state, currentPanorama = {}) {
     state.currentPanorama = currentPanorama
   },
+
   SET_IS_USING_VR_MODE (state, isUsingVRMode = false) {
     state.isUsingVRMode = isUsingVRMode
   }

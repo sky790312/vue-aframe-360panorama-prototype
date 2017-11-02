@@ -1,10 +1,8 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <!-- <router-view/> -->
     <pano-container></pano-container>
     <menu-container></menu-container>
-    <pano-thumb-list></pano-thumb-list>
+    <thumbnail-container></thumbnail-container>
     <i-modal
       class="black center"
       v-show="isModalShow"
@@ -25,7 +23,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 import PanoContainer from '@/components/PanoContainer'
 import MenuContainer from '@/components/MenuContainer'
-import PanoThumbList from '@/components/PanoThumbList'
+import thumbnailContainer from '@/components/thumbnailContainer'
 
 import IModal from '@/components/UI/IModal'
 
@@ -35,7 +33,7 @@ export default {
   components: {
     PanoContainer,
     MenuContainer,
-    PanoThumbList,
+    thumbnailContainer,
     IModal
   },
 

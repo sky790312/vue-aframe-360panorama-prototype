@@ -12,6 +12,7 @@ const actions = {
   setCurrentMarker ({ commit }, currentMarker = {}) {
     commit('SET_CURRENT_MARKER', currentMarker)
   },
+
   setIsVRTagShow ({ commit }, isVRTagShow = false) {
     commit('SET_IS_VR_TAG_SHOW', isVRTagShow)
   }
@@ -21,6 +22,7 @@ const mutations = {
   SET_CURRENT_MARKER (state, currentMarker = {}) {
     state.currentMarker = currentMarker
   },
+
   SET_IS_VR_TAG_SHOW (state, isVRTagShow = false) {
     state.isVRTagShow = isVRTagShow
   }

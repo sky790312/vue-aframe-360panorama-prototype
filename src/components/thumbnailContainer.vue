@@ -1,5 +1,5 @@
 <template>
-  <div id="pano-thumb-list">
+  <div id="thumbnail-container">
     <div
       v-for="panorama in panoramas"
       class="thumbnail"
@@ -18,7 +18,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'PanoThumbList',
+  name: 'thumbnailContainer',
 
   data () {
     return {
@@ -46,7 +46,7 @@ export default {
 <style lang="stylus" scoped>
 @import '../css/variables'
 
-#pano-thumb-list {
+#thumbnail-container {
   position: absolute
   bottom: 0
   display: flex
