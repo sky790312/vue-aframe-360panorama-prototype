@@ -269,7 +269,7 @@ export default {
   methods: {
     setPanoramaPosition (index) {
       let coordinateX = (index + 1) * 10 - 15
-      return `${coordinateX} -7 -70`
+      return `${coordinateX} -12 -70`
     },
 
     onResourceLoaded () {
