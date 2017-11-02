@@ -3,7 +3,7 @@
     <a-entity
       v-for="(panorama, index) in panoramas"
       :key="panorama.id"
-      :position="getPanoramaPosition(index)"
+      :position="setPanoramaPosition(index)"
       @click="onVRMenuClick(panorama)">
       <a-image
         :src="panorama.imageSrc"
@@ -60,7 +60,7 @@ export default {
       'setCurrentPanorama'
     ]),
 
-    getPanoramaPosition (index) {
+    setPanoramaPosition (index) {
       let coordinateX = (index + 1) * 10 - 15
       return `${coordinateX} -12 -70`
     },
