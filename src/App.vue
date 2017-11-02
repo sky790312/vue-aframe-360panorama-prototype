@@ -1,139 +1,136 @@
 <template>
   <div id="app">
-    <!-- <div class="aframe-container"> -->
-      <a-scene
-        class="scene"
-        ref="scene"
-        @click="onSceneClick($event)"
-        @enter-vr="handleEnterVR()"
-        @exit-vr="handleExitVR()"
-        @loaded="onResourceLoaded()"
-        :vr-mode-ui="scene.vrModeUi"
-        :cursor="scene.cursor"
-        inspector>
-        <a-assets>
-          <img
-            v-for="panorama in panoramas"
-            :key="panorama.id"
-            :src="panorama.imageSrc">
-          <img id="tag" :src="tagImage">
-          <img id="point" :src="pointImage">
-        </a-assets>
-        <!-- Basic plane. -->
-        <a-sky :src="currentPanorama.imageSrc"></a-sky>
-        <a-camera
-          :reverse-mouse-drag="camera.shouldReverseDrag"
-          @componentchanged="onCameraChange($event)">
-          <a-cursor
-            v-if="isUsingVRMode"
-            :fuse="cursor.shouldFuse"
-            :color="cursor.color"
-            :position="cursor.position">
-            <a-animation
-              :begin="cursor.animation.begin"
-              :attribute="cursor.animation.attribute"
-              :fill="cursor.animation.fill"
-              :from="cursor.animation.from"
-              :to="cursor.animation.to"
-              :dur="cursor.animation.duration">
-            </a-animation>
-          </a-cursor>
-        </a-camera>
-        <a-entity>
-          <a-plane
-            v-if="isVRTagShow"
-            :width="vTag.planeWidth"
-            :height="vTag.planeHeight"
-            :color="vTag.planeColor"
-            :position="vTag.planePosition">
-            <a-text
-              :value="currentMarker.text"
-              :width="vTag.textSize"
-              :position="vTag.textPosition"
-              :color="vTag.textColor">
-            </a-text>
-            <a-image
-              :src="currentMarker.imageSrc"
-              :width="vTag.imageWidth"
-              :height="vTag.imageHeight"
-              :position="vTag.imagePosition">
-            </a-image>
-          </a-plane>
-          <a-entity
-            v-if="isUsingVRMode"
-            v-for="(panorama, index) in panoramas"
-            :key="panorama.id"
-            :position="setPanoramaPosition(index)"
-            @click="onThumbnailClick(panorama)">
-            <a-image
-              :src="panorama.imageSrc"
-              :width="vThumbnail.imageWidth"
-              :height="vThumbnail.imageHeight"
-              :position="vThumbnail.imagePosition">
-            </a-image>
-            <a-plane
-              :position="vThumbnail.planePosition"
-              :color="vThumbnail.planeColor"
-              :width="vThumbnail.planeWidth">
-              <a-text
-                :value="panorama.title"
-                :width="vThumbnail.textSize"
-                :color="vThumbnail.textColor"
-                :position="vThumbnail.textPosition">
-              </a-text>
-            </a-plane>
-          </a-entity>
-          <a-image
-            v-for="marker in currentPanorama.markers"
-            :key="marker.id"
-            :width="markerConfig.width"
-            :height="markerConfig.height"
-            :color="markerConfig.color"
-            :opacity="markerConfig.initialOpacity"
-            :transparent="markerConfig.isTransparent"
-            :src="marker.iconSrc"
-            :position="marker.position"
-            @click="onMarkerClick(marker, $event)"
-            @mouseenter="onMarkerMouseenter(marker, $event)"
-            @mouseleave="onMarkerMouseleave(marker, $event)">
-            <a-animation
-              :attribute="markerConfig.animation.attribute"
-              :from="markerConfig.animation.from"
-              :to="markerConfig.animation.to"
-              :dur="markerConfig.animation.duration"
-              :repeat="markerConfig.animation.repeat">
-            </a-animation>
-          </a-image>
-        </a-entity>
-      </a-scene>
-      <div class="menu-container">
-        <i
-          class="i-icon i-icon-2x i-icon-vr"
-          @click="handleEnterVR()">
-        </i>
-      </div>
-      <div class="thumbnail-container">
-        <div
+    <a-scene
+      class="scene"
+      ref="scene"
+      @click="onSceneClick($event)"
+      @enter-vr="handleEnterVR()"
+      @exit-vr="handleExitVR()"
+      @loaded="onResourceLoaded()"
+      :vr-mode-ui="scene.vrModeUi"
+      :cursor="scene.cursor"
+      inspector>
+      <a-assets>
+        <img
           v-for="panorama in panoramas"
-          class="thumbnail"
           :key="panorama.id"
+          :src="panorama.imageSrc">
+        <img id="tag" :src="tagImage">
+        <img id="point" :src="pointImage">
+      </a-assets>
+      <a-sky :src="currentPanorama.imageSrc"></a-sky>
+      <a-camera
+        :reverse-mouse-drag="camera.shouldReverseDrag"
+        @componentchanged="onCameraChange($event)">
+        <a-cursor
+          v-if="isUsingVRMode"
+          :fuse="cursor.shouldFuse"
+          :color="cursor.color"
+          :position="cursor.position">
+          <a-animation
+            :begin="cursor.animation.begin"
+            :attribute="cursor.animation.attribute"
+            :fill="cursor.animation.fill"
+            :from="cursor.animation.from"
+            :to="cursor.animation.to"
+            :dur="cursor.animation.duration">
+          </a-animation>
+        </a-cursor>
+      </a-camera>
+      <a-entity>
+        <a-plane
+          v-if="isVRTagShow"
+          :width="vTag.planeWidth"
+          :height="vTag.planeHeight"
+          :color="vTag.planeColor"
+          :position="vTag.planePosition">
+          <a-text
+            :value="currentMarker.text"
+            :width="vTag.textSize"
+            :position="vTag.textPosition"
+            :color="vTag.textColor">
+          </a-text>
+          <a-image
+            :src="currentMarker.imageSrc"
+            :width="vTag.imageWidth"
+            :height="vTag.imageHeight"
+            :position="vTag.imagePosition">
+          </a-image>
+        </a-plane>
+        <a-entity
+          v-if="isUsingVRMode"
+          v-for="(panorama, index) in panoramas"
+          :key="panorama.id"
+          :position="setPanoramaPosition(index)"
           @click="onThumbnailClick(panorama)">
-          <img
+          <a-image
             :src="panorama.imageSrc"
-            class="thumbnail-img">
-          <p class="thumbnail-title">{{ panorama.title }}</p>
-        </div>
+            :width="vThumbnail.imageWidth"
+            :height="vThumbnail.imageHeight"
+            :position="vThumbnail.imagePosition">
+          </a-image>
+          <a-plane
+            :position="vThumbnail.planePosition"
+            :color="vThumbnail.planeColor"
+            :width="vThumbnail.planeWidth">
+            <a-text
+              :value="panorama.title"
+              :width="vThumbnail.textSize"
+              :color="vThumbnail.textColor"
+              :position="vThumbnail.textPosition">
+            </a-text>
+          </a-plane>
+        </a-entity>
+        <a-image
+          v-for="marker in currentPanorama.markers"
+          :key="marker.id"
+          :width="markerConfig.width"
+          :height="markerConfig.height"
+          :color="markerConfig.color"
+          :opacity="markerConfig.initialOpacity"
+          :transparent="markerConfig.isTransparent"
+          :src="marker.iconSrc"
+          :position="marker.position"
+          @click="onMarkerClick(marker, $event)"
+          @mouseenter="onMarkerMouseenter(marker, $event)"
+          @mouseleave="onMarkerMouseleave(marker, $event)">
+          <a-animation
+            :attribute="markerConfig.animation.attribute"
+            :from="markerConfig.animation.from"
+            :to="markerConfig.animation.to"
+            :dur="markerConfig.animation.duration"
+            :repeat="markerConfig.animation.repeat">
+          </a-animation>
+        </a-image>
+      </a-entity>
+    </a-scene>
+    <div class="menu-container">
+      <i
+        class="i-icon i-icon-2x i-icon-vr"
+        @click="handleEnterVR()">
+      </i>
+    </div>
+    <div class="thumbnail-container">
+      <div
+        v-for="panorama in panoramas"
+        class="thumbnail"
+        :key="panorama.id"
+        @click="onThumbnailClick(panorama)">
+        <img
+          :src="panorama.imageSrc"
+          class="thumbnail-img">
+        <p class="thumbnail-title">{{ panorama.title }}</p>
       </div>
-      <i-modal
-        class="black center"
-        v-show="isModalShow"
-        @closeModal="closeModal()">
-        <template slot="body">
-          <img :src="currentMarker.imageSrc">
-          <p>{{ currentMarker.text}}</p>
-        </template>
-      </i-modal>
-    <!-- </div> -->
+    </div>
+    <i-modal
+      class="black center"
+      v-show="isModalShow"
+      @closeModal="closeModal()">
+      <template slot="body">
+        <img :src="currentMarker.imageSrc">
+        <p>{{ currentMarker.text}}</p>
+      </template>
+    </i-modal>
   </div>
 </template>
 
@@ -161,7 +158,6 @@ export default {
       isUsingVRMode: false,
       isVRTagShow: false,
       isModalShow: false,
-      // panoramaImage: panoramaImage,
       tagImage: tagImage,
       pointImage: pointImage,
       logoImage: logoImage,
