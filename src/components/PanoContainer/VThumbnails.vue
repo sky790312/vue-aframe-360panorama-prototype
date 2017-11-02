@@ -51,6 +51,7 @@ export default {
   computed: {
     ...mapGetters([
       'panoramas',
+      'currentPanorama',
       'isUsingVRMode'
     ])
   },
@@ -66,6 +67,10 @@ export default {
     },
 
     onVRMenuClick (panorama) {
+      if (panorama.id === this.currentPanorama.id) {
+        return
+      }
+
       this.setCurrentPanorama(panorama)
     }
   }

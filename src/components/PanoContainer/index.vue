@@ -15,8 +15,8 @@
           v-for="panorama in panoramas"
           :key="panorama.id"
           :src="panorama.imageSrc">
-        <img id="tag" :src="tagImage">
-        <img id="point" :src="pointImage">
+        <img :src="tagImage">
+        <img :src="pointImage">
       </a-assets>
       <a-sky :src="currentPanorama.imageSrc"></a-sky>
       <pano-camera></pano-camera>

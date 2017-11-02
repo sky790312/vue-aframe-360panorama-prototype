@@ -73,7 +73,7 @@ export default {
     ]),
 
     onMarkerClick (marker, e) {
-      if (this.isUsingVRMode) {
+      if (marker.id === this.currentMarker.id || this.isUsingVRMode) {
         return
       }
 
@@ -82,7 +82,7 @@ export default {
     },
 
     onMarkerMouseenter (marker, e) {
-      if (this.isModalShow) {
+      if (marker.id === this.currentMarker.id || this.isModalShow) {
         return
       }
 
@@ -120,6 +120,7 @@ export default {
     handlePoint () {
       const foundPanorama = this.panoramas.find(panorama => panorama.id === this.currentMarker.nextPanoramaId)
       this.setCurrentPanorama(foundPanorama)
+      this.setCurrentMarker({})
     }
   }
 }
