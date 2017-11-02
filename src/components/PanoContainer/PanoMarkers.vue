@@ -4,12 +4,13 @@
       v-if="isVRTagShow"
       :width="markerConfig.tag.planeWidth"
       :height="markerConfig.tag.planeHeight"
-      :position="markerConfig.tag.planePosition"
-      :color="markerConfig.tag.planeColor">
+      :color="markerConfig.tag.planeColor"
+      :position="markerConfig.tag.planePosition">
       <a-text
         :value="currentMarker.text"
-        :width="markerConfig.tag.fontSize"
-        :position="markerConfig.tag.fontPosition">
+        :width="markerConfig.tag.textSize"
+        :position="markerConfig.tag.textPosition"
+        :color="markerConfig.tag.textColor">
       </a-text>
       <a-image
         :src="currentMarker.imageSrc"
@@ -18,6 +19,30 @@
         :position="markerConfig.tag.imagePosition">
       </a-image>
     </a-plane>
+    <a-entity
+      v-if="isUsingVRMode"
+      v-for="(panorama, index) in panoramas"
+      :key="panorama.id"
+      :position="getPanoramaPosition(index)"
+      @click="onVRMenuClick(panorama)">
+      <a-image
+        :src="panorama.imageSrc"
+        :width="markerConfig.panosMenu.imageWidth"
+        :height="markerConfig.panosMenu.imageHeight"
+        :position="markerConfig.panosMenu.imagePosition">
+      </a-image>
+      <a-plane
+        :position="markerConfig.panosMenu.planePosition"
+        :color="markerConfig.panosMenu.planeColor"
+        :width="markerConfig.panosMenu.planeWidth">
+        <a-text
+          :value="panorama.title"
+          :width="markerConfig.panosMenu.textSize"
+          :color="markerConfig.panosMenu.textColor"
+          :position="markerConfig.panosMenu.textPosition">
+        </a-text>
+      </a-plane>
+    </a-entity>
     <a-image
       v-for="marker in currentPanorama.markers"
       :key="marker.id"
@@ -69,11 +94,23 @@ export default {
           planeHeight: 40,
           planePosition: '0 12 -70',
           planeColor: '#000',
-          fontSize: '6',
-          fontPosition: '-1 -10.6 65',
-          imageWidth: 20,
-          imageHeight: 20,
-          imagePosition: '0 0 7'
+          imageWidth: 10,
+          imageHeight: 10,
+          imagePosition: '0 -6 45',
+          textSize: 20,
+          textPosition: '-3.5 -12 45',
+          textColor: '#fff'
+        },
+        panosMenu: {
+          imageWidth: 7,
+          imageHeight: 7,
+          imagePosition: '0 0 45',
+          planePosition: '0 -4 45',
+          planeColor: '#000',
+          planeWidth: '7',
+          textColor: '#fff',
+          textSize: 20,
+          textPosition: '-2.2 .1 0'
         }
       }
     }
@@ -101,6 +138,15 @@ export default {
       'setIsVRTagShow',
       'setIsModalShow'
     ]),
+
+    getPanoramaPosition (index) {
+      let coordinateX = (index + 1) * 10 - 15
+      return `${coordinateX} -7 -70`
+    },
+
+    onVRMenuClick (panorama) {
+      this.setCurrentPanorama(panorama)
+    },
 
     onMarkerClick (marker, e) {
       if (this.isUsingVRMode) {
