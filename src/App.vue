@@ -23,7 +23,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 import PanoContainer from '@/components/PanoContainer'
 import MenuContainer from '@/components/MenuContainer'
-import thumbnailContainer from '@/components/thumbnailContainer'
+import ThumbnailContainer from '@/components/ThumbnailContainer'
 
 import IModal from '@/components/UI/IModal'
 
@@ -33,7 +33,7 @@ export default {
   components: {
     PanoContainer,
     MenuContainer,
-    thumbnailContainer,
+    ThumbnailContainer,
     IModal
   },
 

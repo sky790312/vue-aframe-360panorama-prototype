@@ -4,55 +4,34 @@
       v-for="(panorama, index) in panoramas"
       :key="panorama.id"
       :position="setPanoramaPosition(index)"
-      @click="onVRMenuClick(panorama)">
-      <a-image
-        :src="panorama.imageSrc"
-        :width="vThumbnail.imageWidth"
-        :height="vThumbnail.imageHeight"
-        :position="vThumbnail.imagePosition">
-      </a-image>
-      <a-plane
-        :position="vThumbnail.planePosition"
-        :color="vThumbnail.planeColor"
-        :width="vThumbnail.planeWidth">
-        <a-text
-          :value="panorama.title"
-          :width="vThumbnail.textSize"
-          :color="vThumbnail.textColor"
-          :position="vThumbnail.textPosition">
-        </a-text>
-      </a-plane>
+      @click="onVThumbnailClick(panorama)">
+      <v-thumbnail
+        :panorama="panorama">
+      </v-thumbnail>
     </a-entity>
   </a-entity>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import VThumbnail from '@/components/PanoContainer/VThumbnail'
 
 export default {
   name: 'VThumbnails',
 
+  components: {
+    VThumbnail
+  },
+
   data () {
     return {
-      vThumbnail: {
-        imageWidth: 7,
-        imageHeight: 7,
-        imagePosition: '0 0 45',
-        planePosition: '0 -4 45',
-        planeColor: '#000',
-        planeWidth: '7',
-        textColor: '#fff',
-        textSize: 20,
-        textPosition: '-2.2 .1 0'
-      }
     }
   },
 
   computed: {
     ...mapGetters([
       'panoramas',
-      'currentPanorama',
-      'isUsingVRMode'
+      'currentPanorama'
     ])
   },
 
@@ -66,7 +45,7 @@ export default {
       return `${coordinateX} -12 -70`
     },
 
-    onVRMenuClick (panorama) {
+    onVThumbnailClick (panorama) {
       if (panorama.id === this.currentPanorama.id) {
         return
       }

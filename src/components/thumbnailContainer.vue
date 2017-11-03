@@ -18,7 +18,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'thumbnailContainer',
+  name: 'ThumbnailContainer',
 
   data () {
     return {
